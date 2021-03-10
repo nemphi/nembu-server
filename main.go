@@ -7,6 +7,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/compress"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/etag"
 )
 
 func main() {
@@ -17,15 +18,15 @@ func main() {
 
 	app := fiber.New(fiber.Config{
 		Prefork: true,
-		ETag:    true,
 	})
 	app.Use(cors.New())
+	app.Use(etag.New())
 	app.Use(compress.New(compress.Config{
 		Level: compress.LevelBestSpeed,
 	}))
 
 	app.Get("/", func(ctx *fiber.Ctx) error {
-		ctx.SendString("Hello World Nope")
+		ctx.SendString("Hello World")
 		return nil
 	})
 
