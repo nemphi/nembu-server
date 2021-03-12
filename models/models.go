@@ -1,5 +1,7 @@
 package models
 
+import "time"
+
 type dbFields struct {
 	ID        string `json:"id,omitempty"`
 	CreatedAt int64  `json:"created_at,omitempty"`
@@ -7,22 +9,23 @@ type dbFields struct {
 }
 
 type User struct {
-	dbFields `json:"db_fields,omitempty"`
+	dbFields
 
 	Name          string `json:"name,omitempty"`
 	Surname       string `json:"surname,omitempty"`
 	Email         string `json:"email,omitempty"`
-	Password      string `json:"-"`
+	Password      string `json:"-,omitempty"`
 	PersonalPhone string `json:"personal_phone,omitempty"`
+	AuthProvider  string `json:"auth_provider,omitempty"`
 }
 
 type Media struct {
-	dbFields
+	dbFields 
 
-	Title    string `json:"title,omitempty"`
-	AltText  string `json:"alt_text,omitempty"`
-	Path     string `json:"path,omitempty"`
-	Provider string `json:"provider,omitempty"`
+	Title           string `json:"title,omitempty"`
+	AltText         string `json:"alt_text,omitempty"`
+	Path            string `json:"path,omitempty"`
+	StorageProvider string `json:"storage_provider,omitempty"`
 }
 
 type Resource struct {
@@ -61,4 +64,45 @@ type AggregateResourceViews struct {
 	Views      uint   `json:"views,omitempty"`
 	Comments   uint   `json:"comments,omitempty"`
 	ResourceID string `json:"resource_id,omitempty"` // Resource.ID
+}
+
+type Event struct {
+	dbFields
+
+	Type string                 `json:"type,omitempty"`
+	Meta map[string]interface{} `json:"meta,omitempty"`
+}
+
+type Template struct {
+	dbFields
+
+	Name string
+	Content string
+	TextContent string
+	Disabled bool
+}
+
+type StorageProvider struct {
+	dbFields
+
+	Name string
+	ConnectionURL string
+	AuthToken string
+	RefreshTokenEvery time.Duration
+}
+
+type AuthProvider struct {
+	dbFields
+
+	Name string
+	ConnectionURL string
+	AuthToken string
+	RefreshTokenEvery time.Duration
+}
+
+type Plugin struct {
+	dbFields
+
+	Name string
+	MarketID string
 }
