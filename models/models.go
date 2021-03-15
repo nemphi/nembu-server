@@ -20,7 +20,7 @@ type User struct {
 }
 
 type Media struct {
-	dbFields 
+	dbFields
 
 	Title           string `json:"title,omitempty"`
 	AltText         string `json:"alt_text,omitempty"`
@@ -76,33 +76,47 @@ type Event struct {
 type Template struct {
 	dbFields
 
-	Name string
-	Content string
+	Name        string
+	Content     string
 	TextContent string
-	Disabled bool
+	Disabled    bool
 }
 
 type StorageProvider struct {
 	dbFields
 
-	Name string
-	ConnectionURL string
-	AuthToken string
+	Name              string
+	ConnectionURL     string
+	AuthToken         string
 	RefreshTokenEvery time.Duration
 }
 
 type AuthProvider struct {
 	dbFields
 
-	Name string
-	ConnectionURL string
-	AuthToken string
+	Name              string
+	ConnectionURL     string
+	AuthToken         string
 	RefreshTokenEvery time.Duration
 }
 
 type Plugin struct {
 	dbFields
 
-	Name string
+	Name     string
 	MarketID string
+}
+
+func AllModels() []interface{} {
+	return []interface{}{
+		(*User)(nil),
+		(*Media)(nil),
+		(*Resource)(nil),
+		(*Comment)(nil),
+		(*AggregateResourceViews)(nil),
+		(*Template)(nil),
+		(*StorageProvider)(nil),
+		(*AuthProvider)(nil),
+		(*Plugin)(nil),
+	}
 }
