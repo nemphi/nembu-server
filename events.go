@@ -33,29 +33,23 @@ func (sv *Server) RegisterEventListener(etype EventType, f EventListener) {
 }
 
 func (sv *Server) EmitEvent(event Event) {
-	if !sv.started {
+	if sv.status != StatusStarted {
 		return
 	}
 	sv.events <- event
 }
 
 func (sv *Server) listenToEvents() {
-	for {
-		select {
-		case event, more := <-sv.events:
-			if !more {
-				return
-			}
-			Ilisteners, ok := sv.eventMapper.Load(event.Type)
-			if !ok {
-				continue
-			}
-			listeners := Ilisteners.([]EventListener)
-			go func(listeners []EventListener, sv *Server) {
-				for _, listener := range listeners {
-					go listener(event, sv)
-				}
-			}(listeners, sv)
+	for event := range sv.events {
+		Ilisteners, ok := sv.eventMapper.Load(event.Type)
+		if !ok {
+			continue
 		}
+		listeners := Ilisteners.([]EventListener)
+		go func(listeners []EventListener, sv *Server, event Event) {
+			for _, listener := range listeners {
+				go listener(event, sv)
+			}
+		}(listeners, sv, event)
 	}
 }
