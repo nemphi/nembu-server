@@ -3,9 +3,11 @@ package models
 import "time"
 
 type dbFields struct {
-	ID        string `json:"id,omitempty"`
-	CreatedAt int64  `json:"created_at,omitempty"`
-	UpdatedAt int64  `json:"updated_at,omitempty"`
+	UID       string    `json:"uid,omitempty"`
+	CreatedAt time.Time `json:"created_at,omitempty"`
+	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	DeletedAt time.Time `json:"deleted_at,omitempty"`
+	DType     []string  `json:"dgraph.type,omitempty"`
 }
 
 type User struct {
@@ -31,17 +33,19 @@ type Media struct {
 type Resource struct {
 	dbFields
 
-	Collection       string `json:"collection,omitempty"`
-	Slug             string `json:"slug,omitempty"`
-	Title            string `json:"title,omitempty"`
-	Content          string `json:"content,omitempty"`
-	TextContent      string `json:"text_content,omitempty"`
-	TotalViews       uint   `json:"total_views,omitempty"`
-	TotalComments    uint   `json:"total_comments,omitempty"`
-	Public           bool   `json:"public,omitempty"`
-	CommentsAllowed  bool   `json:"comments_allowed,omitempty"`
-	CreatedByID      string `json:"created_by_id,omitempty"`      // User.ID
-	ParentResourceID string `json:"parent_resource_id,omitempty"` // Resource.ID
+	Collection       string    `json:"collection,omitempty"`
+	Slug             string    `json:"slug,omitempty"`
+	Title            string    `json:"title,omitempty"`
+	Content          string    `json:"content,omitempty"`
+	TextContent      string    `json:"text_content,omitempty"`
+	TotalViews       uint      `json:"total_views,omitempty"`
+	TotalComments    uint      `json:"total_comments,omitempty"`
+	Public           bool      `json:"public,omitempty"`
+	CommentsAllowed  bool      `json:"comments_allowed,omitempty"`
+	CreatedByID      string    `json:"created_by_id,omitempty"`
+	CreatedBy        *User     `json:"created_by,omitempty"` // User.ID
+	ParentResourceID string    `json:"parent_resource_id,omitempty"`
+	ParentResource   *Resource `json:"parent_resource,omitempty"` // Resource.ID
 }
 
 type Page = Resource
@@ -51,19 +55,23 @@ type Post = Resource
 type Comment struct {
 	dbFields
 
-	Content         string `json:"content,omitempty"`
-	TextContent     string `json:"text_content,omitempty"`
-	CreatedByID     string `json:"created_by_id,omitempty"`     // User.ID
-	ResourceID      string `json:"resource_id,omitempty"`       // Resource.ID
-	ParentCommentID string `json:"parent_comment_id,omitempty"` // Comment.ID
+	Content         string    `json:"content,omitempty"`
+	TextContent     string    `json:"text_content,omitempty"`
+	CreatedByID     string    `json:"created_by_id,omitempty"`
+	CreatedBy       *User     `json:"created_by,omitempty"` // User.ID
+	ResourceID      string    `json:"resource_id,omitempty"`
+	Resource        *Resource `json:"resource,omitempty"` // Resource.ID
+	ParentCommentID string    `json:"parent_comment_id,omitempty"`
+	ParentComment   *Comment  `json:"parent_comment,omitempty"` // Comment.ID
 }
 
 type AggregateResourceViews struct {
 	dbFields
 
-	Views      uint   `json:"views,omitempty"`
-	Comments   uint   `json:"comments,omitempty"`
-	ResourceID string `json:"resource_id,omitempty"` // Resource.ID
+	Views      uint      `json:"views,omitempty"`
+	Comments   uint      `json:"comments,omitempty"`
+	ResourceID string    `json:"resource_id,omitempty"`
+	Resource   *Resource `json:"resource,omitempty"` // Resource.ID
 }
 
 type Event struct {
