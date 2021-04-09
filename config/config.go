@@ -16,6 +16,7 @@ type DBConfig struct {
 	Username string `json:"username,omitempty"`
 	Password string `json:"password,omitempty"`
 	Database string `json:"database,omitempty"`
+	Insecure bool   `json:"insecure,omitempty"`
 }
 
 func LoadFromJSON(bytes []byte) (*Config, error) {
